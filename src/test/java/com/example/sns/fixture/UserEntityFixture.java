@@ -1,6 +1,6 @@
 package com.example.sns.fixture;
 
-import com.example.sns.controller.model.entity.UserEntity;
+import com.example.sns.model.entity.UserEntity;
 
 public class UserEntityFixture {
     // 가짜 테스트용 UserEntity인 Fixture를 만듦

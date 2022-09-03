@@ -1,6 +1,7 @@
 package com.example.sns.controller;
 
-import com.example.sns.controller.model.User;
+import com.example.sns.exception.ErrorCode;
+import com.example.sns.model.User;
 import com.example.sns.controller.request.UserJoinRequest;
 import com.example.sns.controller.request.UserLoginRequest;
 import com.example.sns.exception.SnsApplicationException;
@@ -54,7 +55,8 @@ public class UserControllerTest {
         String userName = "userName";
         String password = "password";
 
-        when(userService.join(userName, password)).thenThrow(new SnsApplicationException());
+        when(userService.join(userName, password)).
+                thenThrow(new SnsApplicationException(ErrorCode.DUPLICATED_USER_NAME, ""));
 
         mockMvc.perform(post("/api/v1/users/join")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -86,7 +88,7 @@ public class UserControllerTest {
         String password = "password";
 
         // TODO: mocking
-        when(userService.login(userName, password)).thenThrow(new SnsApplicationException());
+        when(userService.login(userName, password)).thenThrow(new SnsApplicationException(ErrorCode.DUPLICATED_USER_NAME, ""));
 
         mockMvc.perform(post("/api/v1/users/login")  // 해당 url로 post 요청한다.
                         .contentType(MediaType.APPLICATION_JSON)
@@ -102,7 +104,7 @@ public class UserControllerTest {
         String password = "password";
 
         // TODO: mocking
-        when(userService.login(userName, password)).thenThrow(new SnsApplicationException());
+        when(userService.login(userName, password)).thenThrow(new SnsApplicationException(ErrorCode.DUPLICATED_USER_NAME, ""));
 
         mockMvc.perform(post("/api/v1/users/login")  // 해당 url로 post 요청한다.
                         .contentType(MediaType.APPLICATION_JSON)

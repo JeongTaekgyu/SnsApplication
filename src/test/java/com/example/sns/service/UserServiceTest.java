@@ -1,6 +1,6 @@
 package com.example.sns.service;
 
-import com.example.sns.controller.model.entity.UserEntity;
+import com.example.sns.model.entity.UserEntity;
 import com.example.sns.exception.SnsApplicationException;
 import com.example.sns.fixture.UserEntityFixture;
 import com.example.sns.repository.UserEntityRepository;
