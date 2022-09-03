@@ -2,6 +2,7 @@ package com.example.sns.controller;
 
 import com.example.sns.controller.model.User;
 import com.example.sns.controller.request.UserJoinRequest;
+import com.example.sns.controller.request.UserLoginRequest;
 import com.example.sns.exception.SnsApplicationException;
 import com.example.sns.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -38,7 +39,7 @@ public class UserControllerTest {
         String password = "password";
 
         // TODO: mocking
-        when(userService.join()).thenReturn(mock(User.class));  // 정상적으로 동작하는 경우 User클래스 반환
+        when(userService.join(userName, password)).thenReturn(mock(User.class));  // 정상적으로 동작하는 경우 User클래스 반환
 
         mockMvc.perform(post("/api/v1/users/join")  // 해당 url로 post 요청한다.
                 .contentType(MediaType.APPLICATION_JSON)
@@ -53,7 +54,7 @@ public class UserControllerTest {
         String userName = "userName";
         String password = "password";
 
-        when(userService.join()).thenThrow(new SnsApplicationException());
+        when(userService.join(userName, password)).thenThrow(new SnsApplicationException());
 
         mockMvc.perform(post("/api/v1/users/join")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -61,6 +62,54 @@ public class UserControllerTest {
                         .content(objectMapper.writeValueAsBytes(new UserJoinRequest(userName, password)))
                 ).andDo(print())
                 .andExpect(status().isConflict());  // 에러를 반환하는 테스트이기 때문에 conflict를 기대한다.
+    }
+
+    @Test
+    public void 로그인() throws Exception{
+        String userName = "userName";
+        String password = "password";
+
+        // TODO: mocking
+        when(userService.login(userName, password)).thenReturn("test_token");
+
+        mockMvc.perform(post("/api/v1/users/login")  // 해당 url로 post 요청한다.
+                        .contentType(MediaType.APPLICATION_JSON)
+                        // todo : add request body
+                        .content(objectMapper.writeValueAsBytes(new UserLoginRequest(userName, password)))
+                ).andDo(print())
+                .andExpect(status().isOk());   // status가 정상으로 되기를 기대한다.
+    }
+
+    @Test
+    public void 로그인시_회원가입이_안된_useName을_입력한경우_에러반환() throws Exception{
+        String userName = "userName";
+        String password = "password";
+
+        // TODO: mocking
+        when(userService.login(userName, password)).thenThrow(new SnsApplicationException());
+
+        mockMvc.perform(post("/api/v1/users/login")  // 해당 url로 post 요청한다.
+                        .contentType(MediaType.APPLICATION_JSON)
+                        // todo : add request body
+                        .content(objectMapper.writeValueAsBytes(new UserLoginRequest(userName, password)))
+                ).andDo(print())
+                .andExpect(status().isNotFound());   // 유저를 못찾음
+    }
+
+    @Test
+    public void 로그인시_틀린_password를_입력한경우_에러반환() throws Exception{
+        String userName = "userName";
+        String password = "password";
+
+        // TODO: mocking
+        when(userService.login(userName, password)).thenThrow(new SnsApplicationException());
+
+        mockMvc.perform(post("/api/v1/users/login")  // 해당 url로 post 요청한다.
+                        .contentType(MediaType.APPLICATION_JSON)
+                        // todo : add request body
+                        .content(objectMapper.writeValueAsBytes(new UserLoginRequest(userName, password)))
+                ).andDo(print())
+                .andExpect(status().isUnauthorized());    // invalid한 패스워드를 반환해서 인증이 안됨
     }
 
 }
