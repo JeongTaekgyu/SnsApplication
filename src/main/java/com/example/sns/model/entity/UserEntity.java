@@ -13,7 +13,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "\"user\"") // Postgresql은 user가 이미 존재해서 \"을 붙여준다.
 @Getter @Setter
-@SQLDelete(sql = "UPDATED \"user\" SET deleted_at = NOW() where id =?")  // delete 쿼리가 날라왔을 때 delete된 시간을 처리해줌
+@SQLDelete(sql = "UPDATE \"user\" SET deleted_at = NOW() where id =?")  // delete 쿼리가 날라왔을 때 delete된 시간을 처리해줌
 @Where(clause = "deleted_at is NULL") // deleted_At이 NULL 인것만 가져온다.
 public class UserEntity {
 

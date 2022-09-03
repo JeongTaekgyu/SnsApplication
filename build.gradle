@@ -55,8 +55,9 @@ task cleanFrontEnd(type: Delete) {
     delete "$projectDir/front-end/static", "$projectDir/front-end/node_modules"
 }
 
-npmBuild.dependsOn npmInstall
-copyFrontEnd.dependsOn npmBuild
-compileJava.dependsOn copyFrontEnd
-
-clean.dependsOn cleanFrontEnd
+// 프론트 코드랑 같이 build 하는거
+//npmBuild.dependsOn npmInstall
+//copyFrontEnd.dependsOn npmBuild
+//compileJava.dependsOn copyFrontEnd
+//
+//clean.dependsOn cleanFrontEnd
