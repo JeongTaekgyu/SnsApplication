@@ -1,7 +1,9 @@
 package com.example.sns.controller;
 
+import com.example.sns.controller.request.UserLoginRequest;
 import com.example.sns.controller.response.Response;
 import com.example.sns.controller.response.UserJoinResponse;
+import com.example.sns.controller.response.UserLoginResponse;
 import com.example.sns.model.User;
 import com.example.sns.controller.request.UserJoinRequest;
 import com.example.sns.service.UserService;
@@ -23,5 +25,11 @@ public class UserController {
         User user = userService.join(request.getUserName(), request.getPassword());
         UserJoinResponse response = UserJoinResponse.fromUser(user);
         return Response.success(response);
+    }
+
+    @PostMapping("/login")
+    public Response<UserLoginResponse> login(@RequestBody UserLoginRequest request) {
+        String token = userService.login(request.getUserName(), request.getPassword());
+        return Response.success(new UserLoginResponse(token));
     }
 }

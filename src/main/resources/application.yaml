@@ -15,3 +15,9 @@ spring:
     password: 9354873e5c505075f53b17fd026e0fac5ba5e3d55c39394075dc52ac7f5760ab
     platfrom: postgres
     driver-class-name: org.postgresql.Driver
+
+jwt:
+  secret-key: jeongtaekgyu.sns-application-2022.secret_key
+  # 30 days
+  token:
+    expired-time-ms: 2592000000
