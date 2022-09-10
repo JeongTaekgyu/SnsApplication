@@ -27,9 +27,9 @@ public class UserService {
 
         // 회원가입 진행 = user를 등록
         UserEntity userEntity = userEntityRepository.save(UserEntity.of(userName, encoder.encode(password)));
-
         //throw new SnsApplicationException(ErrorCode.DUPLICATED_USER_NAME, String.format("%s is duplicated", userName));
-        return User.fromEntity(userEntity);
+        throw new RuntimeException(); // save 이후에도 @Transactional이 있기 때문에 에러 발생하면 db에 저장안된다.
+//        return User.fromEntity(userEntity);
     }
 
     // 로그인 성공하면 그에 맞는 토큰을 반환

@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
 
@@ -26,6 +27,10 @@ public class UserServiceTest {
     @MockBean
     private UserEntityRepository userEntityRepository;
 
+    @MockBean
+    private BCryptPasswordEncoder encoder;
+
+
     @Test
     void 회원가입이_정상적으로_동작하는_경우() {
         String userName = "userName";
@@ -34,6 +39,7 @@ public class UserServiceTest {
         // mocking
         // 회원가입이 된적이 없기 때문에 userName으로 db에서 찾으면 정보가 없다.
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.empty());
+        when(encoder.encode(password)).thenReturn("encrypt_password");
         //when(userEntityRepository.save(any())).thenReturn(Optional.of(mock(UserEntity.class))); // 이코드를 아래 fixture가 있는코드로 변경함
         when(userEntityRepository.save(any())).thenReturn(Optional.of(UserEntityFixture.get(userName, password)));
 
@@ -52,6 +58,7 @@ public class UserServiceTest {
 //        when(userEntityRepository.save(any())).thenReturn(Optional.of(mock(UserEntity.class)));
         // 위에 2행을 fixture로 변환함
         when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.of(fixture));
+        when(encoder.encode(password)).thenReturn("encrypt_password");
         when(userEntityRepository.save(any())).thenReturn(Optional.of(fixture));
         
         
