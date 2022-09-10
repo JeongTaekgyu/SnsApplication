@@ -9,9 +9,9 @@ spring:
 
   datasource:
     hikari:
-      maximum-pool-size: 4  # \uBBF8\uB9AC \uBA87\uAC1C\uC758 \uCEE4\uB125\uC158\uC744 \uB9FA\uC744\uAC74\uC9C0
-    url: jdbc:postgresql://ec2-44-205-63-142.compute-1.amazonaws.com/d7ba2vrbuj83os
-    username: ztpmiujdoupkbw
-    password: 157502422b4d40260a767472390648613c02620831b15fee5f9f67b7a6c8b582
+      maximum-pool-size: 4  # 커넥션을 맺는데 몇개의 커넥션을 맺을지
+    url: jdbc:postgresql://ec2-54-163-34-107.compute-1.amazonaws.com/d3o37pl6aahhlc
+    username: ojgjchwdzfamhm
+    password: 9354873e5c505075f53b17fd026e0fac5ba5e3d55c39394075dc52ac7f5760ab
     platfrom: postgres
     driver-class-name: org.postgresql.Driver

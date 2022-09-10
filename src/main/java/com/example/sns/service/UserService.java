@@ -6,14 +6,18 @@ import com.example.sns.model.entity.UserEntity;
 import com.example.sns.exception.SnsApplicationException;
 import com.example.sns.repository.UserEntityRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserEntityRepository userEntityRepository;
+    private final BCryptPasswordEncoder encoder;
 
+    @Transactional  // Exception이 발생하면 엔티티를 저장하는 부분이 rollback이 될 수 있다.
     public User join(String userName, String password){
         // 회원가입하려는 userName으로 회원가입된 user가 있는지
         // user가 있다면 에러를 발생시킨다.
@@ -22,8 +26,9 @@ public class UserService {
         });
 
         // 회원가입 진행 = user를 등록
-        UserEntity userEntity = userEntityRepository.save(UserEntity.of(userName, password));
-        
+        UserEntity userEntity = userEntityRepository.save(UserEntity.of(userName, encoder.encode(password)));
+
+        //throw new SnsApplicationException(ErrorCode.DUPLICATED_USER_NAME, String.format("%s is duplicated", userName));
         return User.fromEntity(userEntity);
     }
 

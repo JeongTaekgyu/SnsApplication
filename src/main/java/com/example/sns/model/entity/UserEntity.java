@@ -2,6 +2,7 @@ package com.example.sns.model.entity;
 
 import com.example.sns.model.UserRole;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
@@ -15,6 +16,7 @@ import java.time.Instant;
 @Getter @Setter
 @SQLDelete(sql = "UPDATE \"user\" SET deleted_at = NOW() where id =?")  // delete 쿼리가 날라왔을 때 delete된 시간을 처리해줌
 @Where(clause = "deleted_at is NULL") // deleted_At이 NULL 인것만 가져온다.
+@NoArgsConstructor
 public class UserEntity {
 
     @Id
