@@ -25,6 +25,12 @@ public class UserService {
     @Value("${jwt.token.expired-time-ms}")
     private Long expiredTimeMs;
 
+    // UserDetailsService 인터페이스를 implements 받지 않고 직업 구현 한다.
+    public User loadUserByUserName(String userName){
+        return userEntityRepository.findByUserName(userName).map(User::fromEntity).orElseThrow(
+                () -> new SnsApplicationException(ErrorCode.USER_NOT_FOUND, String.format("%s not founded", userName)));
+    }
+
     @Transactional  // Exception이 발생하면 엔티티를 저장하는 부분이 rollback이 될 수 있다.
     public User join(String userName, String password){
         // 회원가입하려는 userName으로 회원가입된 user가 있는지
