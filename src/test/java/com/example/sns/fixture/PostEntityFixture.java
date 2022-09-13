@@ -5,9 +5,9 @@ import com.example.sns.model.entity.UserEntity;
 
 public class PostEntityFixture {
     // 가짜 테스트용 UserEntity인 Fixture를 만듦
-    public static PostEntity get(String userName, Integer postId) {
+    public static PostEntity get(String userName, Integer postId, Integer userId) {
         UserEntity user = new UserEntity();
-        user.setId(1);
+        user.setId(userId);
         user.setUserName(userName);
 
         PostEntity result = new PostEntity();
