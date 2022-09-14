@@ -90,7 +90,7 @@ function Basic() {
       url: '/api/v1/users/login',
       method: 'POST',
       data: {
-        name: userName,
+        name: userName, // name으로 데이터를 보낸다.
         password: password,
       },
     })
