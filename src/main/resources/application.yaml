@@ -1,7 +1,7 @@
 spring:
   jpa:
     database: postgresql
-    hibernate.dialect: org.hibernate.dilect.PostgreSQLdialect
+    hibernate.dialect: org.hibernate.dialect.PostgreSQLdialect
     hibernate:
       ddl-auto: update
     properties.hibernate.format_sql: true
