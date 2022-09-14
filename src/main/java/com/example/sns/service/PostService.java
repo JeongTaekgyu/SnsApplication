@@ -64,6 +64,5 @@ public class PostService {
         }
 
         postEntityRepository.delete(postEntity);
-
     }
 }
