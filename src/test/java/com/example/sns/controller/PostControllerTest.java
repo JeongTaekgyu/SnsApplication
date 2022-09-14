@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
@@ -66,6 +67,7 @@ public class PostControllerTest {
                 .andExpect(status().isUnauthorized());   //.
     }
 
+    // ---------------------- modify(update) ----------------------
     @Test
     @WithMockUser   // 인증된 상태로 테스트를 진행
     void 포스트수정() throws Exception{
@@ -129,6 +131,7 @@ public class PostControllerTest {
                 .andExpect(status().isNotFound());   // 찾을 수 없기를 기대한다.
     }
 
+    // ---------------------- delete ----------------------
     @Test
     @WithMockUser   // 인증된 상태로 테스트를 진행
     void 포스트삭제() throws Exception{
@@ -170,4 +173,50 @@ public class PostControllerTest {
                 ).andDo(print())
                 .andExpect(status().isNotFound());   // 찾을 수 없기를 기대한다.
     }
+
+    // ---------------------- feedlist ----------------------
+    @Test
+    @WithMockUser   // 인증된 상태로 테스트를 진행
+    void 피드목록() throws Exception{
+        when(postService.list(any())).thenReturn(Page.empty());
+
+        mockMvc.perform(get("/api/v1/posts")  // 해당 url로 post 요청한다.
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isOk());   // status가 정상으로 되기를 기대한다.
+    }
+
+    @Test
+    @WithAnonymousUser // 익명의 유저
+    void 피드목록요청시_로그인하지_않은경우() throws Exception{
+        when(postService.list(any())).thenReturn(Page.empty());
+
+        mockMvc.perform(delete("/api/v1/posts")  // 해당 url로 post 요청한다.
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isUnauthorized());   // 권한이 없기를 기대한다.
+    }
+
+    @Test
+    @WithMockUser   // 인증된 상태로 테스트를 진행
+    void 내_피드목록() throws Exception{
+        when(postService.my(any(), any())).thenReturn(Page.empty());
+
+        mockMvc.perform(get("/api/v1/posts/my")  // 해당 url로 post 요청한다.
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isOk());   // status가 정상으로 되기를 기대한다.
+    }
+
+    @Test
+    @WithAnonymousUser // 익명의 유저
+    void 내_피드목록요청시_로그인하지_않은경우() throws Exception{
+        when(postService.list(any())).thenReturn(Page.empty());
+
+        mockMvc.perform(delete("/api/v1/posts/my")  // 해당 url로 post 요청한다.
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isUnauthorized());   // 권한이 없기를 기대한다.
+    }
+
 }
