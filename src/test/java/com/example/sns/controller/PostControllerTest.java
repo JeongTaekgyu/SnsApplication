@@ -23,8 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -49,7 +48,6 @@ public class PostControllerTest {
 
         mockMvc.perform(post("/api/v1/posts")  // 해당 url로 post 요청한다.
                         .contentType(MediaType.APPLICATION_JSON)
-                        // todo : add request body
                         .content(objectMapper.writeValueAsBytes(new PostCreateRequest(title, body)))
                 ).andDo(print())
                 .andExpect(status().isOk());   // status가 정상으로 되기를 기대한다.
@@ -63,7 +61,6 @@ public class PostControllerTest {
 
         mockMvc.perform(post("/api/v1/posts")  // 해당 url로 post 요청한다.
                         .contentType(MediaType.APPLICATION_JSON)
-                        // todo : add request body
                         .content(objectMapper.writeValueAsBytes(new PostCreateRequest(title, body)))
                 ).andDo(print())
                 .andExpect(status().isUnauthorized());   //.
@@ -80,7 +77,6 @@ public class PostControllerTest {
 
         mockMvc.perform(put("/api/v1/posts/1")  // 해당 url로 post 요청한다.
                         .contentType(MediaType.APPLICATION_JSON)
-                        // todo : add request body
                         .content(objectMapper.writeValueAsBytes(new PostModifyRequest(title, body)))
                 ).andDo(print())
                 .andExpect(status().isOk());   // status가 정상으로 되기를 기대한다.
@@ -94,7 +90,6 @@ public class PostControllerTest {
 
         mockMvc.perform(put("/api/v1/posts/1")  // 해당 url로 post 요청한다.
                         .contentType(MediaType.APPLICATION_JSON)
-                        // todo : add request body
                         .content(objectMapper.writeValueAsBytes(new PostModifyRequest(title, body)))
                 ).andDo(print())
                 .andExpect(status().isUnauthorized());   // 권한이 없음을 기대한다.
@@ -112,7 +107,6 @@ public class PostControllerTest {
 
         mockMvc.perform(put("/api/v1/posts/1")  // 해당 url로 post 요청한다.
                         .contentType(MediaType.APPLICATION_JSON)
-                        // todo : add request body
                         .content(objectMapper.writeValueAsBytes(new PostModifyRequest(title, body)))
                 ).andDo(print())
                 .andExpect(status().isUnauthorized());
@@ -130,8 +124,49 @@ public class PostControllerTest {
 
         mockMvc.perform(put("/api/v1/posts/1")  // 해당 url로 post 요청한다.
                         .contentType(MediaType.APPLICATION_JSON)
-                        // todo : add request body
                         .content(objectMapper.writeValueAsBytes(new PostModifyRequest(title, body)))
+                ).andDo(print())
+                .andExpect(status().isNotFound());   // 찾을 수 없기를 기대한다.
+    }
+
+    @Test
+    @WithMockUser   // 인증된 상태로 테스트를 진행
+    void 포스트삭제() throws Exception{
+        mockMvc.perform(delete("/api/v1/posts/1")  // 해당 url로 post 요청한다.
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isOk());   // status가 정상으로 되기를 기대한다.
+    }
+
+    @Test
+    @WithAnonymousUser // 익명의 유저
+    void 포스트삭제시_로그인하지_않은경우() throws Exception{
+        mockMvc.perform(delete("/api/v1/posts/1")  // 해당 url로 post 요청한다.
+                                .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isUnauthorized());   // 권한이 없기를 기대한다.
+    }
+
+    @Test
+    @WithMockUser   // 인증된 상태로 테스트를 진행
+    void 포스트삭제시_작성자와_삭제요청자가_다를경우() throws Exception{
+        // mocking
+        doThrow(new SnsApplicationException(ErrorCode.INVALID_PERMISSION)).when(postService).delete(any(), any());
+
+        mockMvc.perform(delete("/api/v1/posts/1")  // 해당 url로 post 요청한다.
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andDo(print())
+                .andExpect(status().isUnauthorized());   // 권한이 없기를 기대한다.
+    }
+
+    @Test
+    @WithMockUser   // 인증된 상태로 테스트를 진행
+    void 포스트삭제시_삭제하려는_포스트가_존재하지_않을_경우() throws Exception{
+        // mocking
+        doThrow(new SnsApplicationException(ErrorCode.POST_NOT_FOUND)).when(postService).delete(any(), any());
+
+        mockMvc.perform(delete("/api/v1/posts/1")  // 해당 url로 post 요청한다.
+                        .contentType(MediaType.APPLICATION_JSON)
                 ).andDo(print())
                 .andExpect(status().isNotFound());   // 찾을 수 없기를 기대한다.
     }

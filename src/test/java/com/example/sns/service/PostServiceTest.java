@@ -115,6 +115,60 @@ public class PostServiceTest {
 
         SnsApplicationException e = Assertions.assertThrows(SnsApplicationException.class, () -> postService.modify(title, body, userName, postId));
         Assertions.assertEquals(ErrorCode.INVALID_PERMISSION, e.getErrorCode());
+    }
+
+    // ---------------------- delete ----------------------
+    @Test
+    void 포스트삭제가_성공한경우() {
+        String userName = "userName";
+        Integer postId = 1;
+
+        PostEntity postEntity = PostEntityFixture.get(userName, postId, 1);
+        UserEntity userEntity = postEntity.getUser();
+        // mocking
+
+        when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.of(userEntity));
+        when(postEntityRepository.findById(postId)).thenReturn(Optional.of(postEntity));
+
+        // throw 하면 안된다.
+        Assertions.assertDoesNotThrow(() -> postService.delete(userName, 1));
+    }
+
+    @Test
+    void 포스트삭제시_포스트가_존재하지않는_경우() {
+        String userName = "userName";
+        Integer postId = 1;
+
+        PostEntity postEntity = PostEntityFixture.get(userName, postId, 1);
+        UserEntity userEntity = postEntity.getUser();
+        // mocking
+
+        when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.of(userEntity));
+        when(postEntityRepository.findById(postId)).thenReturn(Optional.empty());
+
+        SnsApplicationException e = Assertions.assertThrows(SnsApplicationException.class,
+                () -> postService.delete(userName, 1));
+        Assertions.assertEquals(ErrorCode.POST_NOT_FOUND, e.getErrorCode());
+    }
+
+    @Test
+    void 포스트삭제시_권한이_없는_경우() {
+        String userName = "userName";
+        Integer postId = 1;
+
+        // userName, userId, password 모두 같게 해도 PostEntityFixture.get 메서드에서 UserEntity를 생성하고
+        // UserEntityFixture.get메서드에서 따로 UserEntity를 생성하기 때문에 UserEntity 자체가 달라서 무조건 modify 메서드에서 INVALID_PERMISSION 에러 날 수 밖에 없다.
+        PostEntity postEntity = PostEntityFixture.get(userName, postId, 1);
+        UserEntity writer = UserEntityFixture.get("userName1", "password", 2);
+        // mocking
+        // @MockBean으로 등록했으면 반드시 사용을 해야하네
+        when(userEntityRepository.findByUserName(userName)).thenReturn(Optional.of(writer));
+        when(postEntityRepository.findById(postId)).thenReturn(Optional.of(postEntity));
+
+        SnsApplicationException e = Assertions.assertThrows(SnsApplicationException.class,
+                () -> postService.delete(userName, 1));
+        Assertions.assertEquals(ErrorCode.INVALID_PERMISSION, e.getErrorCode());
 
     }
+    
 }
