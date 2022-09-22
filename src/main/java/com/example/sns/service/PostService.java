@@ -79,4 +79,9 @@ public class PostService {
         // 내가 작성한 포스트중에서 findAll 해야한다.
         return postEntityRepository.findAllByUser(userEntity, pageable).map(Post::fromEntity);
     }
+
+    @Transactional
+    public void like(Integer postId, String usreName) {
+
+    }
 }
