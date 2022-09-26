@@ -118,4 +118,9 @@ public class PostService {
         // 해당 포스트의 like count만 가져온다.
         return likeEntityRepository.countByPost(postEntity);
     }
+
+    @Transactional
+    public void comment(Integer postId, String userName){
+
+    }
 }
