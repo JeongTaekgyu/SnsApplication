@@ -2,16 +2,12 @@ package com.example.sns.service;
 
 import com.example.sns.exception.ErrorCode;
 import com.example.sns.exception.SnsApplicationException;
+import com.example.sns.model.AlarmArgs;
+import com.example.sns.model.AlarmType;
 import com.example.sns.model.Comment;
 import com.example.sns.model.Post;
-import com.example.sns.model.entity.CommentEntity;
-import com.example.sns.model.entity.LikeEntity;
-import com.example.sns.model.entity.PostEntity;
-import com.example.sns.model.entity.UserEntity;
-import com.example.sns.repository.CommentEntityRepository;
-import com.example.sns.repository.LikeEntityRepository;
-import com.example.sns.repository.PostEntityRepository;
-import com.example.sns.repository.UserEntityRepository;
+import com.example.sns.model.entity.*;
+import com.example.sns.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +24,7 @@ public class PostService {
     private final UserEntityRepository userEntityRepository;
     private final LikeEntityRepository likeEntityRepository;
     private final CommentEntityRepository commentEntityRepository;
+    private final AlarmEntityRepository alarmEntityRepository;
 
     @Transactional
     public void create(String title, String body, String userName){
@@ -54,6 +51,7 @@ public class PostService {
 //        return Post.fromEntity(postEntityRepository.save(postEntity));
         return Post.fromEntity(postEntityRepository.saveAndFlush(postEntity));  // saveAndFlush
         // save() 메소드는 바로 DB 에 저장되지 않고 영속성 컨텍스트에 저장되었다가 flush() 또는 commit() 수행 시 DB에 저장됨
+        // 근데 save 하면 db에 updatedAt이 저장은 되는데 반환할때 updatedAt 이 null로 들어감 (saveAndFlush하면 updatedAt이 정상적으로 반환됨)
         // saveAndFlush() 메소드는 실행중(트랜잭션)에 즉시 data를 flush 한다.
         // saveAndFlush() 메소드는 Spring Data JPA 에서 정의한 JpaRepository 인터페이스의 메소드이다.
     }
@@ -98,6 +96,8 @@ public class PostService {
 
         // like save
         likeEntityRepository.save(LikeEntity.of(userEntity, postEntity));
+
+        alarmEntityRepository.save(AlarmEntity.of(postEntity.getUser(), AlarmType.NEW_LIKE_ON_POST, new AlarmArgs(userEntity.getId(), postEntity.getId())) );
     }
 
     @Transactional
@@ -121,6 +121,9 @@ public class PostService {
 
         // comment save
         commentEntityRepository.save(CommentEntity.of(userEntity, postEntity, comment));
+
+        // 알람은 post를 작성한 사람에게 보낸다.
+        alarmEntityRepository.save(AlarmEntity.of(postEntity.getUser(), AlarmType.NEW_COMMENT_ON_POST, new AlarmArgs(userEntity.getId(), postEntity.getId())) );
     }
 
     public Page<Comment> getComments(Integer postId, Pageable pageable){
