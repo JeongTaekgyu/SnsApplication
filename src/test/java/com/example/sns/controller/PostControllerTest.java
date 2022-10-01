@@ -279,7 +279,7 @@ public class PostControllerTest {
     @Test
     @WithAnonymousUser // 익명의 유저
     void 댓글작성시_게시물이_없는경우() throws Exception{
-        doThrow(new SnsApplicationException(ErrorCode.POST_NOT_FOUND)).when(postService).like(any(), any());
+        doThrow(new SnsApplicationException(ErrorCode.POST_NOT_FOUND)).when(postService).comment(any(), any(), any());
 
         mockMvc.perform(post("/api/v1/posts/1/comments")  // 해당 url로 post 요청한다.
                         .contentType(MediaType.APPLICATION_JSON)
