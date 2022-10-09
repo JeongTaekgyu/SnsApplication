@@ -5,10 +5,13 @@ import com.example.sns.controller.response.AlarmResponse;
 import com.example.sns.controller.response.Response;
 import com.example.sns.controller.response.UserJoinResponse;
 import com.example.sns.controller.response.UserLoginResponse;
+import com.example.sns.exception.ErrorCode;
+import com.example.sns.exception.SnsApplicationException;
 import com.example.sns.model.Alarm;
 import com.example.sns.model.User;
 import com.example.sns.controller.request.UserJoinRequest;
 import com.example.sns.service.UserService;
+import com.example.sns.util.ClassUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,6 +42,10 @@ public class UserController {
     public Response<Page<AlarmResponse>> alarm(Pageable pageable, Authentication authentication){
         //Page<Alarm> alarm = userService.alarmList(authentication.getName(), pageable);
         //return Response.success(alarm.map(AlarmResponse::fromAlarm));
-        return Response.success(userService.alarmList(authentication.getName(), pageable).map(AlarmResponse::fromAlarm));
+
+        // UsernamePasswordAuthenticationToken 에서 principal
+        User user = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), User.class).orElseThrow(
+                () -> new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to User class failed"));
+        return Response.success(userService.alarmList(user.getId(), pageable).map(AlarmResponse::fromAlarm));
     }
 }
