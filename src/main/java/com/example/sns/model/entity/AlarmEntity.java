@@ -31,7 +31,7 @@ public class AlarmEntity {
     private Integer id;
 
     // 알람을 받는 사람
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)  // 미리 가져오지 않고 AlarmEntity에서 .getUser할때 호출한다.
     @JoinColumn(name = "user_id")// 외래키가 있는 주인쪽에서 상대방한테 JoinColumn을 건다.
     private UserEntity user;
 

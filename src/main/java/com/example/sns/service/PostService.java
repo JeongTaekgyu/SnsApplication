@@ -85,7 +85,6 @@ public class PostService {
     public void like(Integer postId, String userName) {
         // post exist
         PostEntity postEntity = getPostEntityOrException(postId);
-
         UserEntity userEntity = getUserEntityOrException(userName);
 
         // check liked -> throw
@@ -101,7 +100,7 @@ public class PostService {
     }
 
     @Transactional
-    public int likeCount(Integer postId) {
+    public long likeCount(Integer postId) {
         // post exist
         PostEntity postEntity = getPostEntityOrException(postId);
 
