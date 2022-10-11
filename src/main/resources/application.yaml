@@ -1,5 +1,4 @@
-spring:
-  jpa:
+spring:jpa:
     database: postgresql
     hibernate.dialect: org.hibernate.dialect.PostgreSQLdialect
     hibernate:
@@ -7,12 +6,12 @@ spring:
     properties.hibernate.format_sql: true
     show-sql: true
 
-  datasource:
+spring.datasource:
     hikari:
       maximum-pool-size: 4  # 커넥션을 맺는데 몇개의 커넥션을 맺을지
-    url: jdbc:postgresql://ec2-54-163-34-107.compute-1.amazonaws.com/d3o37pl6aahhlc
-    username: ojgjchwdzfamhm
-    password: 9354873e5c505075f53b17fd026e0fac5ba5e3d55c39394075dc52ac7f5760ab
+    url: jdbc:postgresql://ec2-44-199-9-102.compute-1.amazonaws.com/d3ecpt2ridid08
+    username: llutqssvvjankr
+    password: def39591b54437460cc2e2a38c7dde3706c11e897a62de92aaa2939ee02eb9b0
     platfrom: postgres
     driver-class-name: org.postgresql.Driver
 
@@ -21,3 +20,5 @@ jwt:
   # 30 days
   token:
     expired-time-ms: 2592000000
+
+spring.redis.url: redis://:p8c96986283119db3932bdc1d9445a50420420455a943c74f8a6ce10389aea749@ec2-44-211-115-39.compute-1.amazonaws.com:28799

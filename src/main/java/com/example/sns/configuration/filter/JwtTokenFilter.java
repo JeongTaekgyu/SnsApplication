@@ -37,7 +37,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {  // 매 요청 때마
 
         // 헤더가 "Bearer "로 시작되지 않는다면 에러 발생
         if (header == null || !header.startsWith("Bearer ")) {
-            log.error("Authorization Header does not start with Bearer {}", request.getRequestURL());
+            log.error("Error occurs while getting header is null or invalid {}", request.getRequestURL());
             filterChain.doFilter(request, response);
             return;
         }
