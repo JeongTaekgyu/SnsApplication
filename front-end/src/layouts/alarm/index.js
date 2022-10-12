@@ -98,7 +98,7 @@ function Alarm() {
 
   useEffect(() => {
     handleGetAlarm();
-
+    // EventSource가 헤더에 셋팅하는걸 지원하지 않아서 path에다 requestParam으로 token을 넣었다.
     eventSource = new EventSource("http://localhost:8080/api/v1/users/alarm/subscribe?token=" + localStorage.getItem('token'));
 
     setAlarmEvent(eventSource);
