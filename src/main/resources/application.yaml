@@ -22,3 +22,28 @@ jwt:
     expired-time-ms: 2592000000
 
 spring.redis.url: redis://:p8c96986283119db3932bdc1d9445a50420420455a943c74f8a6ce10389aea749@ec2-44-211-115-39.compute-1.amazonaws.com:28799
+
+spring:
+  kafka:
+    properties:
+      # cloudkarafka 설정
+      security.protocol: SASL_SSL
+      sasl.mechanism: SCRAM-SHA-256
+      sasl.jaas.config: org.apache.kafka.common.security.scram.ScramLoginModule required username="k25pxplc" password="xuYv-mF-ud2I0RTkzNow8xHFASFheM4L";
+    consumer:
+      properties.spring.json.trusted.packages: "*" # json으로 변환을 할 때 serialize, deserializer할 때 어떤 패키지를 trust하고 허용할 것인지
+      bootstrap-servers: dory-01.srvs.cloudkafka.com:9094, dory-02.srvs.cloudkafka.com:9094, dory-03.srvs.cloudkafka.com:9094
+      group-id: alarm # consumer의 group-id를 구독한다.
+      auto-offset-reset: latest  # 브로커에 쌓여있는 메시지들을 차례대로 읽은 건지 마지막에 있는 메시지를 읽을 건지에 대한 옵션
+      key-deserializer: org.apache.kafka.common.serialization.IntegerDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    listener:
+      ack-mode: MANUAL # 수동으로 ack를 날린다.
+    producer:
+      bootstrap-servers: dory-01.srvs.cloudkafka.com:9094, dory-02.srvs.cloudkafka.com:9094, dory-03.srvs.cloudkafka.com:9094
+      key-serializer: org.apache.kafka.common.serialization.IntegerSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties.enable.idempotence: false # cloudkarafka 설정
+    topic:
+      alarm: k25pxplc-test
+
