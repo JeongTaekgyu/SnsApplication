@@ -25,14 +25,15 @@ public class AuthenticationConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         // 해당 정규 표현식에 해당하는 것만 통과시키고 그게 아닌 것들은 ignore 한다.
-        web.ignoring().regexMatchers("^(?!/api/).*");
+        web.ignoring().regexMatchers("^(?!/api/).*")
+                .antMatchers("/api/*/users/join", "/api/*/users/login");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests()
-                .antMatchers("/api/*/users/join", "/api/*/users/login").permitAll() // 해당 주소 허용
+//                .antMatchers().permitAll() // 해당 주소 허용
                 .antMatchers("/api/**").authenticated() // /api/** 경로를 authenticated 해준다
                 .and()
                 .sessionManagement()    // 세션은 따로 관리 안할거다.
