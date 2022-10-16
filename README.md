@@ -1,6 +1,6 @@
-﻿# SnsApplication
+﻿# Community Application
 
-### 대용량 트래픽을 고려한 SNS 어플리케이션을 구현했습니다.
+### 대용량 트래픽을 고려한 커뮤니티 어플리케이션을 구현했습니다.
 
 개발 환경 : Spring Boot, Gradle, Kafka, Redis, JPA, Spring Security, Github Action, heroku, PostgreSQL
 - Redis를 활용하여 데이터 캐싱을 통해 DB 접근 횟수를 줄여 부하를 낮춤
