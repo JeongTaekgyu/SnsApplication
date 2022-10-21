@@ -49,9 +49,9 @@ public class PostControllerTest {
         String body = "body";
 
         mockMvc.perform(post("/api/v1/posts")  // 해당 url로 post 요청한다.
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsBytes(new PostCreateRequest(title, body)))
-                ).andDo(print())
+                        .contentType(MediaType.APPLICATION_JSON) // JSON 타입으로 지정
+                        .content(objectMapper.writeValueAsBytes(new PostCreateRequest(title, body))) // 내용 등록
+                ).andDo(print()) // 응답값 print
                 .andExpect(status().isOk());   // status가 정상으로 되기를 기대한다.
     }
 

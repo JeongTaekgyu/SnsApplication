@@ -19,7 +19,7 @@ public class Alarm {
     private Timestamp deletedAt;
 
     public static Alarm fromEntity(AlarmEntity entity){
-        log.info("======= Call fromEntity =======");
+        log.info("======= Call fromEntity(Alarm) =======");
         return new Alarm(
                 entity.getId(),
                 entity.getAlarmType(),
