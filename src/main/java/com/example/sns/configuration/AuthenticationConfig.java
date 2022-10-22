@@ -39,7 +39,7 @@ public class AuthenticationConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()    // 세션은 따로 관리 안할거다.
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()  // http request됐을 때 시큐리티 설정 - 필터를 둬서 들어온 토큰이 어떤 유저가 들어왔는지 토큰을 확인
-                .addFilterBefore(new JwtTokenFilter(key, userService), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JwtTokenFilter(key, userService), UsernamePasswordAuthenticationFilter.class) // 얘가 JwtTokenFilter 가게 해줬군
                 .exceptionHandling()    // 예외처리 기능이 작동
                 .authenticationEntryPoint(new CustomAuthenticationEntryPoint());// 필터에서 에러가 났을 경우에 exceptionHandling 한다음에 EntryPoint로 보내줘야한다.
     }

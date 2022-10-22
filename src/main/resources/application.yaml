@@ -21,7 +21,7 @@ jwt:
   token:
     expired-time-ms: 2592000000
 
-spring.redis.url: redis://:p8c96986283119db3932bdc1d9445a50420420455a943c74f8a6ce10389aea749@ec2-44-211-115-39.compute-1.amazonaws.com:28799
+spring.redis.url: redis://:p8c96986283119db3932bdc1d9445a50420420455a943c74f8a6ce10389aea749@ec2-44-209-138-52.compute-1.amazonaws.com:11570
 
 spring:
   kafka:

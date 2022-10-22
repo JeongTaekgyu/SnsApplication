@@ -49,6 +49,7 @@ public class UserController {
         //return Response.success(alarm.map(AlarmResponse::fromAlarm));
 
         // UsernamePasswordAuthenticationToken 에서 principal
+        // 참고로 캐스팅은 에러를 안정적으로 처리하기 위해서 해준다. 그냥 (User) authentication.getPrincipal(); 으로 캐스팅하면 에러 처리가 안된다.
         User user = ClassUtils.getSafeCastInstance(authentication.getPrincipal(), User.class).orElseThrow(
                 () -> new SnsApplicationException(ErrorCode.INTERNAL_SERVER_ERROR, "Casting to User class failed"));
         return Response.success(userService.alarmList(user.getId(), pageable).map(AlarmResponse::fromAlarm));
