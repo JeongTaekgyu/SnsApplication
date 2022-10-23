@@ -7,7 +7,6 @@ import com.example.sns.controller.response.UserJoinResponse;
 import com.example.sns.controller.response.UserLoginResponse;
 import com.example.sns.exception.ErrorCode;
 import com.example.sns.exception.SnsApplicationException;
-import com.example.sns.model.Alarm;
 import com.example.sns.model.User;
 import com.example.sns.controller.request.UserJoinRequest;
 import com.example.sns.service.AlarmService;
