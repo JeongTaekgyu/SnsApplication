@@ -3,7 +3,6 @@ package com.example.sns.controller;
 import com.example.sns.controller.request.PostCommentRequest;
 import com.example.sns.controller.request.PostCreateRequest;
 import com.example.sns.controller.request.PostModifyRequest;
-import com.example.sns.controller.request.UserJoinRequest;
 import com.example.sns.exception.ErrorCode;
 import com.example.sns.exception.SnsApplicationException;
 import com.example.sns.fixture.PostEntityFixture;
